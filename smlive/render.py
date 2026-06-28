@@ -86,9 +86,9 @@ class Renderer:
                 image = zoom(image, (scale, scale, 1), order=1)
             imwrite(os.path.join(out_dir, "frame%04d.jpg" % (out_i + 1)),
                     (image.clip(0, 1) * 255).astype("uint8"))
-        centers = [self.column_for_frame(i, 0.5, "pushbroom") for i in idxs]
+        centers = [float(self.column_for_frame(i, 0.5, "pushbroom")) for i in idxs]
         manifest = {
-            "w": v.w, "h": v.h, "scale": scale, "n": len(idxs),
+            "w": int(v.w), "h": int(v.h), "scale": scale, "n": len(idxs),
             "panorama_size": [int(v.panorama_size[0]), int(v.panorama_size[1])],
             "centers_pushbroom": centers,
             "homographies": v.homographies[idxs].tolist(),

@@ -53,3 +53,21 @@ def test_export_web_asset_writes_frames_and_manifest(tmp_path):
     assert manifest["scale"] <= 1.0
     assert (out / "frame0001.jpg").exists()
     assert "panorama_size" in manifest and len(manifest["panorama_size"]) == 2
+    for key in ["w", "h", "scale", "n", "panorama_size", "centers_pushbroom",
+                "homographies", "bounding_boxes", "warnings"]:
+        assert key in manifest, "manifest missing key: %s" % key
+    assert len(manifest["centers_pushbroom"]) == manifest["n"]
+
+
+def test_export_web_asset_stride_subsamples(tmp_path):
+    r = Renderer(_vol(tmp_path))
+    out = tmp_path / "asset_stride"
+    r.export_web_asset(str(out), max_height=60, stride=2)
+    manifest = json.loads((out / "manifest.json").read_text())
+    expected_n = (len(r.v.files) + 1) // 2
+    assert manifest["n"] == expected_n
+    assert len(manifest["centers_pushbroom"]) == expected_n
+    # written frame count agrees with n
+    written = sorted(p.name for p in out.glob("frame*.jpg"))
+    assert len(written) == expected_n
+    assert written[0] == "frame0001.jpg"
