@@ -38,8 +38,7 @@ class Renderer:
             col = self.column_for_frame(i, viewpoint, mode)
             warped = features.apply_homography(
                 np.array([[col, v.h // 2]]), v.homographies[i])
-            centers[i] = warped[0, 0] - 0  # global_offset already folded into bounding_boxes
-        centers -= float(np.min(v.bounding_boxes[:, 0, 0]))  # align to canvas origin
+            centers[i] = warped[0, 0] - v.global_offset[0]
 
         # strip boundaries = midpoints between consecutive centers
         bounds = (centers[:-1] + centers[1:]) / 2.0

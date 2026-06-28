@@ -29,3 +29,6 @@ def test_render_returns_normalized_rgb(tmp_path):
     pano = r.render(viewpoint=0.5, mode="xslit")
     assert pano.ndim == 3 and pano.shape[2] == 3
     assert pano.min() >= 0.0 and pano.max() <= 1.0
+    assert pano.max() > 0.01                       # strips actually composited, not a black canvas
+    col_filled = (pano.sum(axis=(0, 2)) > 0).mean()  # fraction of canvas columns with content
+    assert col_filled > 0.8                          # mosaic fills (almost) the full width

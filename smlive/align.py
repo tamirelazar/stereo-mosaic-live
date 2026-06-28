@@ -77,6 +77,7 @@ class Aligner:
             homographies=homographies,
             bounding_boxes=bounding_boxes,
             panorama_size=panorama_size,
+            global_offset=global_offset,
             w=w, h=h,
             path=path,
             warnings=warnings,
