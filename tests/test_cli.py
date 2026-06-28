@@ -1,5 +1,6 @@
 import os
 import shutil
+from pathlib import Path
 import numpy as np
 import pytest
 from imageio.v2 import imread
@@ -35,6 +36,7 @@ def test_insufficient_translation_exits_clean(tmp_path, capsys):
     assert "translation" in capsys.readouterr().out.lower()
 
 
+@pytest.mark.skipif(not HAVE_FFMPEG, reason="ffmpeg not installed")
 def test_main_guards_zero_frames(tmp_path, capsys):
     """main() prints a clear error and returns 2 when ffmpeg extracts 0 frames."""
     rc = cli.main(["--input", "nonexistent_file.mp4", "--out", str(tmp_path)])
@@ -60,7 +62,7 @@ def test_golden_regression_synthetic(tmp_path):
     from smlive.render import Renderer
     vol = Aligner(d + os.sep, prefix, n).align(translation_only=True)
     pano = Renderer(vol).render(viewpoint=0.5, mode="pushbroom", blend=False)
-    golden_path = "tests/data/golden/syn_pushbroom.npy"
+    golden_path = str(Path(__file__).parent / "data" / "golden" / "syn_pushbroom.npy")
     if not os.path.exists(golden_path):
         os.makedirs(os.path.dirname(golden_path), exist_ok=True)
         np.save(golden_path, pano)
