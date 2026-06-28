@@ -36,6 +36,13 @@ class Aligner:
         used = features.filter_homographies_with_translation(homographies, minimum_right_translation=5)
         homographies = homographies[used]
 
+        if stabilize:
+            # Anchor every frame's y-translation to the reference frame (identity):
+            # a lateral pan should have ~no vertical motion, so residual y-translation
+            # is unwanted wobble that bows the mosaic's top edge. x-translation (the
+            # parallax we want) is left untouched.
+            homographies[:, 1, 2] = 0.0
+
         bounding_boxes = np.zeros((used.size, 2, 2))
         for i in range(used.size):
             bounding_boxes[i] = features.compute_bounding_box(homographies[i], w, h)

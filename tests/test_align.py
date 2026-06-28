@@ -24,3 +24,14 @@ def test_insufficient_translation_raises_clear_error(tmp_path):
     assert "translation" in str(e.value).lower()
     # message must be actionable, not a traceback artifact
     assert any(w in str(e.value).lower() for w in ["longer", "closer", "fps"])
+
+
+def test_stabilize_removes_vertical_drift(tmp_path):
+    # dy=3 injects genuine per-frame vertical motion the aligner will pick up.
+    d, prefix, n = make_sequence(str(tmp_path / "wob"), dx=30, dy=3)
+    raw = Aligner(d + os.sep, prefix, n).align(translation_only=True, stabilize=False)
+    stab = Aligner(d + os.sep, prefix, n).align(translation_only=True, stabilize=True)
+    raw_y = float(np.abs(raw.homographies[:, 1, 2]).max())
+    stab_y = float(np.abs(stab.homographies[:, 1, 2]).max())
+    assert raw_y > 1.0              # raw genuinely drifts vertically
+    assert stab_y < raw_y * 0.2     # stabilization removes most of it
