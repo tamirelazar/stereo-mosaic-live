@@ -1,4 +1,5 @@
 import os
+import json
 import numpy as np
 from tests.data.make_fixture import make_sequence
 from smlive.align import Aligner
@@ -41,3 +42,14 @@ def test_blending_removes_hard_seam_discontinuity(tmp_path):
     # total horizontal gradient energy should drop with feathering
     def hgrad(p): return np.abs(np.diff(p, axis=1)).sum()
     assert hgrad(soft) <= hgrad(hard)
+
+
+def test_export_web_asset_writes_frames_and_manifest(tmp_path):
+    r = Renderer(_vol(tmp_path))
+    out = tmp_path / "asset"
+    r.export_web_asset(str(out), max_height=60)
+    manifest = json.loads((out / "manifest.json").read_text())
+    assert manifest["n"] == len(r.v.files)
+    assert manifest["scale"] <= 1.0
+    assert (out / "frame0001.jpg").exists()
+    assert "panorama_size" in manifest and len(manifest["panorama_size"]) == 2

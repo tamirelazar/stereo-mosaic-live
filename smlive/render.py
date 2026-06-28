@@ -1,4 +1,8 @@
+import os
+import json
 import numpy as np
+from imageio import imwrite
+from scipy.ndimage import zoom
 from smlive import utils as sol4_utils
 from smlive import features
 
@@ -70,3 +74,26 @@ class Renderer:
             wsum[y_off:y_bottom, x0:x0 + sw] += wmask
         pano = np.divide(acc, wsum, out=np.zeros_like(acc), where=wsum > 0)
         return pano.clip(0, 1)
+
+    def export_web_asset(self, out_dir, max_height=240, stride=1):
+        v = self.v
+        os.makedirs(out_dir, exist_ok=True)
+        scale = min(1.0, max_height / float(v.h))
+        idxs = list(range(0, len(v.files), stride))
+        for out_i, i in enumerate(idxs):
+            image = sol4_utils.read_image(v.files[i], 2)  # (h,w,3) float [0,1]
+            if scale < 1.0:
+                image = zoom(image, (scale, scale, 1), order=1)
+            imwrite(os.path.join(out_dir, "frame%04d.jpg" % (out_i + 1)),
+                    (image.clip(0, 1) * 255).astype("uint8"))
+        centers = [self.column_for_frame(i, 0.5, "pushbroom") for i in idxs]
+        manifest = {
+            "w": v.w, "h": v.h, "scale": scale, "n": len(idxs),
+            "panorama_size": [int(v.panorama_size[0]), int(v.panorama_size[1])],
+            "centers_pushbroom": centers,
+            "homographies": v.homographies[idxs].tolist(),
+            "bounding_boxes": v.bounding_boxes[idxs].tolist(),
+            "warnings": v.warnings,
+        }
+        with open(os.path.join(out_dir, "manifest.json"), "w") as fh:
+            json.dump(manifest, fh)
