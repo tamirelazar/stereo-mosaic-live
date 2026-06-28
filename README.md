@@ -1,49 +1,35 @@
-# Panoramic Stereo Mosaicing
+# stereo-mosaic-live
 
-A faithful replication of stereo mosaicing from a single moving video camera, after Peleg, Ben-Ezra & Pritch (2001). Given a video panned steadily across a scene, it reconstructs a panorama whose perspective shifts as the viewpoint moves.
-<!-- Hero demo: MP4 with GIF fallback. GitHub renders the <video>; the GIF shows anywhere HTML video is stripped. -->
-<video src="docs/demo.mp4" autoplay loop muted playsinline width="960"></video>
+[ one-line tagline — Tamir voice ]
 
-![Mosaiced result](docs/demo.gif)
+[ hero media — interactive viewer GIF, added with the viewer plan ]
 
-<sub>Demo generated from the "boat" example sequence from the Hebrew University Image Processing course.</sub>
+## What it does
 
-## What this is
+[ short factual paragraph — Tamir voice ]
 
-this is a from-scratch replication of the paper's method, written for coursework.
+## Forked from
 
-> Shmuel Peleg, Michael Ben-Ezra, and Yael Pritch. "Stereo mosaicing from a single moving video camera." *Proc. SPIE 4297, Stereoscopic Displays and Virtual Reality Systems VIII* (2001). https://doi.org/10.1117/12.430806
+A continuation of [dynamic_panoramator](https://github.com/tamirelazar/dynamic_panoramator)
+(faithful replication of Peleg, Ben-Ezra & Pritch 2001). This fork advances to the
+Crossed-Slits projection (Zomet, Feldman, Peleg & Weinshall, PAMI 2003), made casual + live.
 
-## How it works
-
-The pipeline deconstructs the video into frames, then:
-
-1. Detects Harris corner features in each frame and builds descriptors.
-2. Matches features between consecutive frames and estimates the alignment (homography, translation-only by default) with RANSAC.
-3. Assembles new panoramic frames from strips of many aligned source frames — turning lateral camera motion into a synthetic change of viewpoint across the output.
-
-## Reproduce
-
-Requires Python 3.12 and `ffmpeg` on PATH.
+## Usage
 
 ```bash
-python -m venv .venv && source .venv/bin/activate   # or: uv venv --python 3.12 .venv
-pip install -r requirements.txt
-python make_panorama.py
+smlive --input videos/boat.mp4 --out out --mode xslit --viewpoint 0.5
+smlive --input my_clip.mp4 --out out --mode forward --stabilize --web-asset
 ```
 
-This runs the bundled example (`videos/boat.mp4`) and writes the mosaic video to the repository root.
+Modes: `pushbroom` (the original), `xslit` (perspective-correct view), `forward` (synthesized forward motion).
 
-To try your own clip, drop a video in `videos/` and point `make_panorama.py` at it.
+## Method
 
-## Limitations
+[ short rigorous explainer — references PAMI 2003 + GLC ECCV 2004; Tamir voice ]
 
-The method assumes a specific capture: steady camera height, slow lateral pan, no rotation, subject near the horizon. 
+## Install
 
-## Improved version
-
-[TBA]
-
-## License
-
-GPL-3.0. See [LICENSE](LICENSE).
+```bash
+uv venv --python 3.12 .venv
+uv pip install -p .venv -r requirements.txt   # requires system ffmpeg
+```

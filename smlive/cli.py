@@ -51,6 +51,9 @@ def main(argv=None):
     prefix = os.path.splitext(os.path.basename(args.input))[0]
     frames_dir = os.path.join(args.out, "frames")
     n = _extract_frames(args.input, frames_dir, prefix)
+    if n == 0:
+        print("error: no frames extracted — is ffmpeg installed and the input path valid?")
+        return 2
     if args.frames:
         n = min(n, args.frames)
     return run_from_frames(frames_dir + os.sep, prefix, n, args.mode,
