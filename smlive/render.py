@@ -27,10 +27,9 @@ class Renderer:
             return base + (t - 0.5) ** 2 * np.sign(viewpoint - 0.5) * span
         raise ValueError("unknown mode: %s" % mode)
 
-    def render(self, viewpoint=0.5, mode="xslit"):
+    def render(self, viewpoint=0.5, mode="xslit", blend=True, feather=8):
         v = self.v
         pano_w, pano_h = int(v.panorama_size[0]), int(v.panorama_size[1])
-        pano = np.zeros((pano_h, pano_w, 3), dtype=np.float64)
 
         # warped x-position of each frame's chosen source column, in panorama coords
         centers = np.zeros(len(v.files))
@@ -45,14 +44,29 @@ class Renderer:
         bounds = np.concatenate([[0.0], bounds, [pano_w]]).round().astype(int)
         bounds = np.clip(bounds, 0, pano_w)
 
+        acc = np.zeros((pano_h, pano_w, 3), dtype=np.float64)
+        wsum = np.zeros((pano_h, pano_w, 1), dtype=np.float64)
         for i in range(len(v.files)):
             image = sol4_utils.read_image(v.files[i], 2)
             warped_image = features.warp_image(image, v.homographies[i])
             x_off, y_off = v.bounding_boxes[i][0].astype(int)
             y_bottom = y_off + warped_image.shape[0]
-            x0, x1 = bounds[i], bounds[i + 1]
+            x0 = max(bounds[i] - (feather if blend else 0), 0)
+            x1 = min(bounds[i + 1] + (feather if blend else 0), pano_w)
             if x1 <= x0:
                 continue
             strip = warped_image[:, x0 - x_off:x1 - x_off]
-            pano[y_off:y_bottom, x0:x0 + strip.shape[1]] = strip
+            sw = strip.shape[1]
+            ramp = np.ones(sw)
+            if blend and feather > 0:
+                f = min(feather, sw // 2)
+                if f > 0:
+                    if i > 0:  # blend left edge only when there is a left neighbour
+                        ramp[:f] = np.linspace(0, 1, f)
+                    if i < len(v.files) - 1:  # blend right edge only when there is a right neighbour
+                        ramp[-f:] = np.linspace(1, 0, f)
+            wmask = ramp[None, :, None]
+            acc[y_off:y_bottom, x0:x0 + sw] += strip * wmask
+            wsum[y_off:y_bottom, x0:x0 + sw] += wmask
+        pano = np.divide(acc, wsum, out=np.zeros_like(acc), where=wsum > 0)
         return pano.clip(0, 1)

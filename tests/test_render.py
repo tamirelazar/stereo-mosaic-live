@@ -32,3 +32,12 @@ def test_render_returns_normalized_rgb(tmp_path):
     assert pano.max() > 0.01                       # strips actually composited, not a black canvas
     col_filled = (pano.sum(axis=(0, 2)) > 0).mean()  # fraction of canvas columns with content
     assert col_filled > 0.8                          # mosaic fills (almost) the full width
+
+
+def test_blending_removes_hard_seam_discontinuity(tmp_path):
+    r = Renderer(_vol(tmp_path))
+    hard = r.render(viewpoint=0.5, mode="pushbroom", blend=False)
+    soft = r.render(viewpoint=0.5, mode="pushbroom", blend=True)
+    # total horizontal gradient energy should drop with feathering
+    def hgrad(p): return np.abs(np.diff(p, axis=1)).sum()
+    assert hgrad(soft) <= hgrad(hard)
