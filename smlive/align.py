@@ -3,6 +3,7 @@ import numpy as np
 from smlive import utils as sol4_utils
 from smlive import features
 from smlive.volume import AlignedVolume
+from smlive.errors import InsufficientTranslation
 
 
 class Aligner:
@@ -45,6 +46,25 @@ class Aligner:
         # per-frame accumulated x-translation in panorama coords (the camera path)
         path = bounding_boxes[:, 0, 0].copy()
 
+        # Net translation must exceed one frame width for a valid mosaic.
+        # (the original code crashed here with a bare `assert crop_left < crop_right`)
+        crop_left = float(bounding_boxes[0][1, 0])    # right edge of first frame
+        crop_right = float(bounding_boxes[-1][0, 0])  # left edge of last frame
+        net_translation = float(path[-1] - path[0])
+        if crop_left >= crop_right:
+            raise InsufficientTranslation(
+                "Net camera translation (%.0f px) is below one frame width (%d px): "
+                "the first and last frames still overlap, so no mosaic can be formed. "
+                "Try a longer lateral pan, a closer subject, or a higher-fps capture."
+                % (net_translation, w))
+
+        warnings = []
+        # Near-pure-rotation / too-slow segments: large frame gaps with little x-gain.
+        steps = np.diff(path)
+        if steps.size and np.median(steps) < 1.0:
+            warnings.append("Low per-frame translation detected; results may be soft. "
+                            "A steadier, faster lateral pan improves sharpness.")
+
         return AlignedVolume(
             files=[self.files[i] for i in used],
             homographies=homographies,
@@ -52,5 +72,5 @@ class Aligner:
             panorama_size=panorama_size,
             w=w, h=h,
             path=path,
-            warnings=[],
+            warnings=warnings,
         )
