@@ -17,7 +17,7 @@ class Aligner:
         pts_desc = []
         for f in self.files:
             image = sol4_utils.read_image(f, 1)
-            self.h, self.w = image.shape
+            h, w = image.shape
             pyr, _ = sol4_utils.build_gaussian_pyramid(image, 3, 7)
             pts_desc.append(features.find_features(pyr))
 
@@ -37,7 +37,7 @@ class Aligner:
 
         bounding_boxes = np.zeros((used.size, 2, 2))
         for i in range(used.size):
-            bounding_boxes[i] = features.compute_bounding_box(homographies[i], self.w, self.h)
+            bounding_boxes[i] = features.compute_bounding_box(homographies[i], w, h)
         global_offset = np.min(bounding_boxes, axis=(0, 1))
         bounding_boxes -= global_offset
         panorama_size = (np.max(bounding_boxes, axis=(0, 1)).astype(int) + 1)
@@ -50,7 +50,7 @@ class Aligner:
             homographies=homographies,
             bounding_boxes=bounding_boxes,
             panorama_size=panorama_size,
-            w=self.w, h=self.h,
+            w=w, h=h,
             path=path,
             warnings=[],
         )
