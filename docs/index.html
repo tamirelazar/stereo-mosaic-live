@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>stereo-mosaic-live</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>stereo-mosaic-live</h1>
+    <p class="tagline">[… one-line framing — Tamir ]</p>
+    <canvas id="hero-canvas"></canvas>
+    <div class="controls" id="hero-controls">
+      <div class="modes">
+        <button data-m="pushbroom">pushbroom</button>
+        <button data-m="xslit" class="on">xslit</button>
+        <button data-m="forward">forward</button>
+      </div>
+      <label class="dial">viewpoint
+        <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5"></label>
+      <label class="toggle"><input class="slices" type="checkbox"> show slices</label>
+    </div>
+    <p class="caption">[… caption: what "show slices" reveals — Tamir ]</p>
+  </section>
+
+  <!-- Task 6: lineage section mounts here -->
+  <!-- Task 7: geometry explainer + depth teaser stub mount here -->
+</main>
+<script type="module">
+import { initViewer } from "./js/viewer.js";
+initViewer(document.getElementById("hero-canvas"),
+           document.getElementById("hero-controls"), "./asset");
+</script>
+</body>
+</html>
