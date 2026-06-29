@@ -93,3 +93,6 @@ canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
 .foot{max-width:1180px;margin:0 auto;padding:14vh 6vw 10vh;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font:400 13px/1.6 "IBM Plex Mono",monospace;color:var(--faint)}
 .foot a{color:var(--muted);text-decoration:none}
 .foot a:hover{color:var(--sig)}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}

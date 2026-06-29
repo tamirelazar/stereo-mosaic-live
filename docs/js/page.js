@@ -65,5 +65,16 @@ async function main() {
   addEventListener("scroll", fadeHint, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(heroLayout);
   attract(hero, document.getElementById("hero-controls"));
+
+  const targets = document.querySelectorAll(".below, .foot");
+  targets.forEach(t => t.classList.add("reveal"));
+  if (reduceMotion) {
+    targets.forEach(t => t.classList.add("in"));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }, { rootMargin: "0px 0px -10% 0px" });
+    targets.forEach(t => io.observe(t));
+  }
 }
 main();
