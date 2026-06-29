@@ -96,3 +96,8 @@ canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* no-WebGL2 fallback */
+.no-webgl2 .stage{background:#000 center/cover no-repeat url("./asset/poster.jpg")}
+.no-webgl2 .console,.no-webgl2 .inset .controls{opacity:.4;pointer-events:none}
+.no-webgl2 .hero::after{content:"This demo needs a WebGL2-capable browser.";position:absolute;left:6vw;bottom:120px;z-index:6;font:400 12px/1.4 "IBM Plex Mono",monospace;color:var(--faint)}
