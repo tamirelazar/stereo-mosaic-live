@@ -6,6 +6,7 @@
 
 :root{--bg:#06070a;--ink:#eef0f4;--muted:#8b929e;--faint:#565d69;
   --line:#ffffff14;--line2:#ffffff26;--sig:#e8b04b}
+html{scroll-behavior:smooth}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
   font:16px/1.6 "Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -54,7 +55,7 @@ canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
 .live{display:flex;align-items:center;gap:8px;color:var(--faint);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--sig);box-shadow:0 0 10px var(--sig)}
 .scrollhint{position:absolute;left:50%;top:90%;z-index:5;transform:translateX(-50%);
-  color:var(--faint);transition:opacity .35s ease;pointer-events:none;will-change:opacity}
+  color:var(--faint);transition:opacity .35s ease;will-change:opacity}
 .scrollhint svg{display:block;animation:bob 1.8s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(4px);opacity:1}}
 @media (prefers-reduced-motion:reduce){.scrollhint svg{animation:none}}
@@ -68,3 +69,27 @@ canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
   .cell:last-child{border-bottom:0}
   .dial{min-width:0}
 }
+
+.below{max-width:1180px;margin:0 auto;padding:13vh 6vw 0}
+.below .num{font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--sig);display:block;margin:0 0 10px}
+.below h2{font:700 clamp(28px,4.6vw,54px)/1.04 "Space Grotesk";letter-spacing:-.02em;margin:0 0 18px;max-width:18ch}
+.below p{color:var(--muted);max-width:62ch;font-size:18px}
+.below em{color:var(--ink);font-style:italic}
+.inset{margin:40px 0 0}
+.inset .frame{border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.inset canvas{width:100%;aspect-ratio:3982/527;display:block;background:#000}
+.inset .controls{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:16px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+.inset .modes{display:flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden}
+.inset .modes button{background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);padding:8px 14px;cursor:pointer;font:inherit;font-size:12px;letter-spacing:.03em}
+.inset .modes button:last-child{border-right:0}
+.inset .modes button.on{background:var(--sig);color:#0a0c11;font-weight:500}
+.inset .dial{display:flex;align-items:center;gap:10px;flex:1;min-width:240px}
+.inset .dial input{flex:1;accent-color:var(--sig)}
+.inset .toggle{display:flex;align-items:center;gap:8px;cursor:pointer}
+.inset .toggle input{accent-color:var(--sig)}
+.inset figcaption{margin-top:12px;font:400 12.5px/1.5 "IBM Plex Mono",monospace;color:var(--faint)}
+.inset figcaption b{color:var(--muted);font-weight:500}
+#depth .note{border-left:2px solid var(--sig);padding:2px 0 2px 18px}
+.foot{max-width:1180px;margin:0 auto;padding:14vh 6vw 10vh;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font:400 13px/1.6 "IBM Plex Mono",monospace;color:var(--faint)}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--sig)}

@@ -59,6 +59,8 @@ function attract(m, controls) {
 async function main() {
   const hero = await mountViewer("hero-canvas", "hero-controls", { mode: "xslit" });
   heroLayout(); fadeHint();
+  await mountViewer("slices-canvas", "slices-controls", { mode: "xslit" });
+  await mountViewer("lineage-canvas", "lineage-controls", { mode: "pushbroom" });
   addEventListener("resize", () => { heroLayout(); fadeHint(); });
   addEventListener("scroll", fadeHint, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(heroLayout);
