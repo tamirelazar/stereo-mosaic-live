@@ -4,6 +4,12 @@ One sideways pan in. A panorama whose viewpoint you choose afterward, out.
 
 ![X-slit mosaic of a riverside village, reconstructed from a single panning clip](docs/hero.png)
 
+## Demo
+
+**[Interactive viewer](https://tamirelazar.github.io/stereo-mosaic-live/)** — choose mode and viewpoint in the browser.
+
+The footage is fixed. The camera isn't.
+
 ## What it does
 
 Point a camera out the side of a moving boat, car, or train and pan steadily across a

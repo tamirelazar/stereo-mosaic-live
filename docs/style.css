@@ -1,0 +1,20 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #0c0d10; color: #e6e7ea;
+  font: 15px/1.6 ui-sans-serif, system-ui, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+h1 { font-size: 22px; letter-spacing: .01em; margin: 0 0 4px; }
+.tagline { color: #8b8f98; margin: 0 0 24px; }
+canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #000;
+  box-shadow: 0 1px 0 #ffffff14, 0 12px 40px #0008; }
+.controls { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin: 16px 0 6px; }
+.modes button { background: #16181d; color: #cfd2d8; border: 1px solid #2a2d35;
+  padding: 7px 14px; border-radius: 6px; cursor: pointer; font: inherit; }
+.modes button.on { background: #2b6cff; border-color: #2b6cff; color: #fff; }
+.dial { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px; color: #cfd2d8; }
+.dial input { flex: 1; }
+.toggle { display: flex; align-items: center; gap: 7px; color: #cfd2d8; cursor: pointer; }
+.caption { color: #6c707a; font-size: 13px; }
+section { margin-bottom: 56px; }
+.fact { color: #8b8f98; font-size: 13px; line-height: 1.7; }
+.stub { color: #555a66; font-size: 13px; font-style: italic; }
