@@ -8,3 +8,6 @@ __pycache__/
 
 # local verification renders (regenerate via the gen script / CLI)
 examples/
+
+# throwaway render-engine prototypes (Phase 1b spike, not shipped)
+prototypes/
