@@ -8,7 +8,7 @@ One sideways pan in. A panorama whose viewpoint you choose afterward, out.
 
 **[Interactive viewer](https://tamirelazar.github.io/stereo-mosaic-live/)** — choose mode and viewpoint in the browser.
 
-[…]
+The footage is fixed. The camera isn't.
 
 ## What it does
 

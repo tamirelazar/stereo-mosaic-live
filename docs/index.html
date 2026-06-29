@@ -10,7 +10,7 @@
 <main>
   <section class="hero">
     <h1>stereo-mosaic-live</h1>
-    <p class="tagline">[… one-line framing — Tamir ]</p>
+    <p class="tagline">One sideways pan in. A panorama whose viewpoint you choose afterward.</p>
     <canvas id="hero-canvas"></canvas>
     <div class="controls" id="hero-controls">
       <div class="modes">
@@ -22,12 +22,13 @@
         <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5"></label>
       <label class="toggle"><input class="slices" type="checkbox"> show slices</label>
     </div>
-    <p class="caption">[… caption: what "show slices" reveals — Tamir ]</p>
+    <p class="caption">Every column you see was lifted from a single frame. Show slices draws the seams between them.</p>
   </section>
 
   <section class="lineage">
-    <h2>[… lineage heading — Tamir ]</h2>
-    <p>[… old→new framing: pushbroom = the original repo, xslit = this fork — Tamir ]</p>
+    <h2>Same frames, two slits</h2>
+    <p>Pushbroom is the original repo: one fixed slit, flat strips. X-slit is this fork — the
+       slit slides across the frames and perspective falls out of it. Same footage, one toggle apart.</p>
     <canvas id="lineage-canvas"></canvas>
     <div class="controls" id="lineage-controls">
       <div class="modes">
@@ -41,7 +42,7 @@
 
   <section class="explainer">
     <h2>How it works</h2>
-    <p>[… framing — Tamir ]</p>
+    <p>The whole thing is a choice of columns.</p>
     <p class="fact">Each output column is taken from one source frame. The mode picks
        <em>which</em> source column to sample per frame: pushbroom holds a fixed column
        (a single slit); xslit slides the column linearly with frame index (a virtual
@@ -52,8 +53,8 @@
 
   <section class="depth-teaser">
     <h2>Depth — next</h2>
-    <p class="stub">[… Phase 2 teaser: X-slit geometry is stereo; EPI slope ∝ depth.
-       Placeholder — not built yet. — Tamir ]</p>
+    <p class="stub">X-slit is quietly stereo — the sweep that bends perspective also leaves depth
+       in the slope of each feature's trail across the frames. Reading it back is the next step. Not built yet.</p>
   </section>
 </main>
 <script type="module">
