@@ -1,0 +1,8 @@
+{
+  "name": "stereo-mosaic-live",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests-js/mosaic-math.test.js"
+  }
+}

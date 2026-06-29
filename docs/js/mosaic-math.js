@@ -12,7 +12,7 @@ export function columnForFrame(i, viewpoint, mode, n, w) {
 }
 
 // apply a 3×3 affine (bottom row [0,0,1]) to [col, h/2], return warped x.
-function warpX(col, H, h) { return H[0][0] * col + H[0][1] * (h / 2) + H[0][2]; }
+function warpX(col, H, h) { return H[0][0] * col + H[0][1] * Math.floor(h / 2) + H[0][2]; }
 
 // panorama-space strip centre for every frame.
 export function centers(M, viewpoint, mode) {
