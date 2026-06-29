@@ -25,13 +25,29 @@
     <p class="caption">[… caption: what "show slices" reveals — Tamir ]</p>
   </section>
 
-  <!-- Task 6: lineage section mounts here -->
+  <section class="lineage">
+    <h2>[… lineage heading — Tamir ]</h2>
+    <p>[… old→new framing: pushbroom = the original repo, xslit = this fork — Tamir ]</p>
+    <canvas id="lineage-canvas"></canvas>
+    <div class="controls" id="lineage-controls">
+      <div class="modes">
+        <button data-m="pushbroom" class="on">pushbroom · original</button>
+        <button data-m="xslit">xslit · this fork</button>
+      </div>
+      <label class="dial">viewpoint
+        <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5"></label>
+    </div>
+  </section>
+
   <!-- Task 7: geometry explainer + depth teaser stub mount here -->
 </main>
 <script type="module">
 import { initViewer } from "./js/viewer.js";
 initViewer(document.getElementById("hero-canvas"),
            document.getElementById("hero-controls"), "./asset");
+const lineage = await initViewer(document.getElementById("lineage-canvas"),
+           document.getElementById("lineage-controls"), "./asset");
+lineage.setMode("pushbroom"); lineage.render();   // start on the "original" side
 </script>
 </body>
 </html>
