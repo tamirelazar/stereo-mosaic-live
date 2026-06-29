@@ -26,7 +26,7 @@ const VS2 = `attribute vec2 a_p; varying vec2 v_uv;
 void main(){ v_uv=(a_p+1.0)*0.5; gl_Position=vec4(a_p,0.0,1.0); }`;
 const FS2 = `precision highp float; varying vec2 v_uv; uniform sampler2D u_acc;
 void main(){ vec4 a=texture2D(u_acc,v_uv);
-  if(a.a<=0.0001){ gl_FragColor=vec4(0.0,0.0,0.0,1.0); return; }
+  if(a.a<=0.0001){ gl_FragColor=vec4(0.0,0.0,0.0,0.0); return; }
   gl_FragColor=vec4(a.rgb/a.a, 1.0); }`;
 
 const FEATHER = 8.0;
@@ -100,7 +100,7 @@ export class MosaicGL {
     gl.enable(gl.BLEND); gl.blendFunc(gl.ONE,gl.ONE);
     this._drawStrips(b,W,H);
     gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,this.canvas.width,this.canvas.height);
-    gl.disable(gl.BLEND); gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.disable(gl.BLEND); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(this.pResolve); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,this.accTex);
     gl.uniform1i(this.loc2.acc,0);
     gl.bindBuffer(gl.ARRAY_BUFFER,this.quad2);
