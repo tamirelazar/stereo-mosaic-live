@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#000">
+<canvas id="c"></canvas>
+<script type="module">
+import { loadAsset } from "./js/loader.js";
+import { MosaicGL } from "./js/mosaic-gl.js";
+const gl = document.getElementById("c").getContext("webgl2");
+const { manifest, textures } = await loadAsset(gl, "./asset");
+const m = new MosaicGL(gl, manifest, textures);
+m.setMode("xslit"); m.setViewpoint(0.5); m.render();
+window.__m = m; window.__gl = gl; window.__ready = true;
+</script></body>
