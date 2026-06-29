@@ -3,11 +3,11 @@ import { initViewer } from "./viewer.js";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Mount a viewer on a canvas + controls container; returns the MosaicGL or null on failure.
-export async function mountViewer(canvasId, controlsId, { mode } = {}) {
+export async function mountViewer(canvasId, controlsId, { mode, drag } = {}) {
   const canvas = document.getElementById(canvasId);
   const controls = document.getElementById(controlsId);
   try {
-    const m = await initViewer(canvas, controls, "./asset");
+    const m = await initViewer(canvas, controls, "./asset", { drag });
     if (mode) { m.setMode(mode); m.render(); }
     const vp = controls.querySelector("input.vp");
     const val = controls.querySelector(".val");
@@ -50,6 +50,8 @@ function attract(m, controls) {
   controls.addEventListener("keydown", stop, { once: true });
   const vp = controls.querySelector("input.vp");
   const val = controls.querySelector(".val");
+  // Grab-and-scrub drives the slider's input event but not the controls' pointerdown, so stop here too.
+  if (vp) vp.addEventListener("input", stop, { once: true });
   (function loop() {
     if (!on) return;
     t += 0.0035;
@@ -63,7 +65,7 @@ function attract(m, controls) {
 }
 
 async function main() {
-  const hero = await mountViewer("hero-canvas", "hero-controls", { mode: "xslit" });
+  const hero = await mountViewer("hero-canvas", "hero-controls", { mode: "xslit", drag: true });
   heroLayout(); fadeHint();
   await mountViewer("slices-canvas", "slices-controls", { mode: "xslit" });
   await mountViewer("lineage-canvas", "lineage-controls", { mode: "pushbroom" });

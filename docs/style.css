@@ -26,6 +26,16 @@ canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
     linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%),
     linear-gradient(to bottom, transparent 0, #000 9%, #000 68%, transparent 100%);
   mask-composite:intersect}
+/* hero strip is grab-and-scrub: drag it to move the viewpoint. Only the strip (canvas box) grabs;
+   the surrounding hero background does not. While held it lifts off the background — drop-shadow
+   follows the feathered mask alpha, so the float reads soft, not a hard rectangle. */
+#hero-canvas{cursor:grab;touch-action:pan-y;transition:transform .25s ease,filter .25s ease}
+#hero-canvas.grabbing{cursor:grabbing;transform:translateY(-8px) scale(1.015);
+  filter:drop-shadow(0 18px 34px #000a)}
+@media (prefers-reduced-motion:reduce){
+  #hero-canvas{transition:filter .2s ease}
+  #hero-canvas.grabbing{transform:none}
+}
 .scrim{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,#06070af0 0,#06070a40 24%,#06070a00 42%,#06070a4d 66%,#06070a 100%)}
 .head{position:relative;z-index:3;padding:48px 6vw 0;display:flex;justify-content:space-between;align-items:flex-start;gap:32px}
