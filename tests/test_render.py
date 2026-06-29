@@ -25,6 +25,28 @@ def test_xslit_column_varies_linearly_with_frame(tmp_path):
     assert np.allclose(diffs, diffs[0])           # and moves linearly
 
 
+def test_forward_is_not_pushbroom_at_default_viewpoint(tmp_path):
+    # regression: forward must NOT collapse to pushbroom at the default viewpoint=0.5
+    r = Renderer(_vol(tmp_path))
+    fwd = np.array([r.column_for_frame(i, viewpoint=0.5, mode="forward") for i in range(5)])
+    pb = np.array([r.column_for_frame(i, viewpoint=0.5, mode="pushbroom") for i in range(5)])
+    assert not np.allclose(fwd, fwd[0])   # forward genuinely varies across frames
+    assert not np.allclose(fwd, pb)       # and is distinct from pushbroom
+    # forward is quadratic (not linear) -> non-constant first-differences, unlike xslit
+    diffs = np.diff(fwd)
+    assert not np.allclose(diffs, diffs[0])
+
+
+def test_forward_mode_renders_nonblank(tmp_path):
+    # closes the forward end-to-end render coverage gap
+    r = Renderer(_vol(tmp_path))
+    pano = r.render(viewpoint=0.5, mode="forward")
+    assert pano.ndim == 3 and pano.shape[2] == 3
+    assert pano.min() >= 0.0 and pano.max() <= 1.0
+    assert pano.max() > 0.01                          # real content, not a black canvas
+    assert (pano.sum(axis=(0, 2)) > 0).mean() > 0.5   # forward sweep fills a substantial width
+
+
 def test_render_returns_normalized_rgb(tmp_path):
     r = Renderer(_vol(tmp_path))
     pano = r.render(viewpoint=0.5, mode="xslit")

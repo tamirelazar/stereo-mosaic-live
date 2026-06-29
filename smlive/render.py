@@ -17,7 +17,10 @@ class Renderer:
         pushbroom: same column every frame (a fixed slit) -> the showcase behavior.
         xslit:     column slides linearly with frame index -> the virtual second slit,
                    `viewpoint` shifts which depth plane is fronto-parallel.
-        forward:   column slides nonlinearly (quadratic) -> simulates forward motion.
+        forward:   column slides quadratically with frame index -> a looming /
+                   forward-motion effect. The sweep is independent of `viewpoint`
+                   (viewpoint only shifts `base`), so the default viewpoint=0.5
+                   still produces motion rather than collapsing to pushbroom.
         """
         n = len(self.v.files)
         base = viewpoint * self.v.w
@@ -28,7 +31,7 @@ class Renderer:
         if mode == "xslit":
             return base + (t - 0.5) * span
         if mode == "forward":
-            return base + (t - 0.5) ** 2 * np.sign(viewpoint - 0.5) * span
+            return base + (t - 0.5) ** 2 * span
         raise ValueError("unknown mode: %s" % mode)
 
     def render(self, viewpoint=0.5, mode="xslit", blend=True, feather=8):
