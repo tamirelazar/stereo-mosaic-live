@@ -5,3 +5,6 @@ tmp_folder_for_panoramic_frames/
 __pycache__/
 *.pyc
 .DS_Store
+
+# local verification renders (regenerate via the gen script / CLI)
+examples/
