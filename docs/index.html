@@ -4,76 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>stereo-mosaic-live</title>
-<link rel="stylesheet" href="style.css">
+<meta name="description" content="One sideways pan in. A panorama whose viewpoint you choose afterward.">
+<link rel="preload" href="./fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<main>
-  <section class="hero">
-    <h1>stereo-mosaic-live</h1>
-    <p class="tagline">One sideways pan in. A panorama whose viewpoint you choose afterward.</p>
-    <canvas id="hero-canvas"></canvas>
-    <div class="controls" id="hero-controls">
+<section class="hero">
+  <div class="glow"></div>
+  <div class="stage"><canvas id="hero-canvas"></canvas></div>
+  <div class="scrim"></div>
+  <div class="head">
+    <div>
+      <h1 class="wordmark">stereo<i>·</i>mosaic<i>·</i>live</h1>
+      <p class="tag">One sideways pan in. A panorama whose viewpoint you choose afterward.</p>
+    </div>
+    <div class="meta"><b>215</b> frames<br><b>3982×527</b> panorama<br>WebGL2 · live</div>
+  </div>
+  <div class="console" id="hero-controls">
+    <div class="cell"><span class="cap">Sampling mode</span>
       <div class="modes">
         <button data-m="pushbroom">pushbroom</button>
         <button data-m="xslit" class="on">xslit</button>
         <button data-m="forward">forward</button>
-      </div>
-      <label class="dial">viewpoint
-        <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5"></label>
-      <label class="toggle"><input class="slices" type="checkbox"> show slices</label>
-    </div>
-    <p class="caption">Every column you see was lifted from a single frame. Show slices draws the seams between them.</p>
-  </section>
-
-  <section class="lineage">
-    <h2>Same frames, two slits</h2>
-    <p>Pushbroom is the original repo: one fixed slit, flat strips. X-slit is this fork — the
-       slit slides across the frames and perspective falls out of it. Same footage, one toggle apart.</p>
-    <canvas id="lineage-canvas"></canvas>
-    <div class="controls" id="lineage-controls">
-      <div class="modes">
-        <button data-m="pushbroom" class="on">pushbroom · original</button>
-        <button data-m="xslit">xslit · this fork</button>
-      </div>
-      <label class="dial">viewpoint
-        <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5"></label>
-    </div>
-  </section>
-
-  <section class="explainer">
-    <h2>How it works</h2>
-    <p>The whole thing is a choice of columns.</p>
-    <p class="fact">Each output column is taken from one source frame. The mode picks
-       <em>which</em> source column to sample per frame: pushbroom holds a fixed column
-       (a single slit); xslit slides the column linearly with frame index (a virtual
-       second slit → perspective); forward sweeps it quadratically (a looming push-in).
-       The viewpoint dial shifts the base column. Tick "show slices" above to see the
-       per-frame strip boundaries.</p>
-  </section>
-
-  <section class="depth-teaser">
-    <h2>Depth — next</h2>
-    <p class="stub">X-slit is quietly stereo — the sweep that bends perspective also leaves depth
-       in the slope of each feature's trail across the frames. Reading it back is the next step. Not built yet.</p>
-  </section>
-</main>
-<script type="module">
-import { initViewer } from "./js/viewer.js";
-async function mount(canvasId, controlsId, mode) {
-  try {
-    const v = await initViewer(document.getElementById(canvasId),
-                               document.getElementById(controlsId), "./asset");
-    if (mode) { v.setMode(mode); v.render(); }
-  } catch (e) {
-    const c = document.getElementById(canvasId);
-    const msg = document.createElement("p");
-    msg.className = "caption";
-    msg.textContent = "This demo needs a WebGL2-capable browser.";
-    c.replaceWith(msg);
-  }
-}
-mount("hero-canvas", "hero-controls");
-mount("lineage-canvas", "lineage-controls", "pushbroom");
-</script>
+      </div></div>
+    <div class="cell dial"><span class="cap">Viewpoint</span>
+      <div class="dialrow"><input class="vp" type="range" min="0" max="1" step="0.005" value="0.5" aria-label="Viewpoint"><span class="val">0.50</span></div></div>
+    <div class="cell"><span class="cap">Seams</span>
+      <label class="toggle"><input class="slices" type="checkbox"> show slices</label></div>
+    <div class="cell"><span class="cap">Output</span>
+      <span class="live"><span class="dot"></span>re-resampled on input</span></div>
+  </div>
+  <a class="scrollhint" id="scrollhint" href="#explainer" aria-label="Scroll for more">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </a>
+</section>
+<!-- sections added in Task 5 -->
+<script type="module" src="./js/page.js"></script>
 </body>
 </html>

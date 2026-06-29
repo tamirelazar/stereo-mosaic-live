@@ -1,20 +1,70 @@
-:root { color-scheme: dark; }
-* { box-sizing: border-box; }
-body { margin: 0; background: #0c0d10; color: #e6e7ea;
-  font: 15px/1.6 ui-sans-serif, system-ui, sans-serif; }
-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
-h1 { font-size: 22px; letter-spacing: .01em; margin: 0 0 4px; }
-.tagline { color: #8b8f98; margin: 0 0 24px; }
-canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #000;
-  box-shadow: 0 1px 0 #ffffff14, 0 12px 40px #0008; }
-.controls { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin: 16px 0 6px; }
-.modes button { background: #16181d; color: #cfd2d8; border: 1px solid #2a2d35;
-  padding: 7px 14px; border-radius: 6px; cursor: pointer; font: inherit; }
-.modes button.on { background: #2b6cff; border-color: #2b6cff; color: #fff; }
-.dial { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px; color: #cfd2d8; }
-.dial input { flex: 1; }
-.toggle { display: flex; align-items: center; gap: 7px; color: #cfd2d8; cursor: pointer; }
-.caption { color: #6c707a; font-size: 13px; }
-section { margin-bottom: 56px; }
-.fact { color: #8b8f98; font-size: 13px; line-height: 1.7; }
-.stub { color: #555a66; font-size: 13px; font-style: italic; }
+@font-face{font-family:"Space Grotesk";src:url("./fonts/space-grotesk-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Space Grotesk";src:url("./fonts/space-grotesk-500.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Space Grotesk";src:url("./fonts/space-grotesk-700.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("./fonts/ibm-plex-mono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("./fonts/ibm-plex-mono-500.woff2") format("woff2");font-weight:500;font-display:swap}
+
+:root{--bg:#06070a;--ink:#eef0f4;--muted:#8b929e;--faint:#565d69;
+  --line:#ffffff14;--line2:#ffffff26;--sig:#e8b04b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 "Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.hero{position:relative;height:100vh;overflow:hidden}
+/* warm gradient across the WHOLE hero (not a band) — peaks behind the strip, fades to bg toward
+   top and bottom so there is no hard edge anywhere; shows through the transparent strip */
+.glow{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(135% 85% at 50% 48%, #7a521a3a 0%, #2a1c0814 40%, transparent 74%)}
+.stage{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%)}  /* no black bg */
+canvas{width:100%;aspect-ratio:3982/527;display:block;background:transparent;
+  /* feather all four edges so the strip dissolves into the gradient instead of a hard border */
+  -webkit-mask:
+    linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 68%, transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask:
+    linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 68%, transparent 100%);
+  mask-composite:intersect}
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,#06070af0 0,#06070a40 24%,#06070a00 42%,#06070a4d 66%,#06070a 100%)}
+.head{position:relative;z-index:3;padding:48px 6vw 0;display:flex;justify-content:space-between;align-items:flex-start;gap:32px}
+.wordmark{font:700 clamp(38px,7vw,92px)/0.88 "Space Grotesk";letter-spacing:-.035em;margin:0}
+.wordmark i{color:var(--sig);font-style:normal}
+.tag{font:400 clamp(14px,1.5vw,19px)/1.45 "Space Grotesk";color:var(--muted);max-width:32ch;margin:18px 0 0}
+.meta{font:400 11.5px/1.7 "IBM Plex Mono",monospace;color:var(--faint);text-align:right;white-space:nowrap;letter-spacing:.02em}
+.meta b{color:var(--muted);font-weight:400}
+.console{position:absolute;left:6vw;right:6vw;bottom:72px;z-index:4;
+  display:flex;align-items:stretch;border:1px solid var(--line2);border-radius:11px;
+  background:#0a0c11cc;backdrop-filter:blur(12px);overflow:hidden;
+  box-shadow:0 28px 70px -28px #000d;font-family:"IBM Plex Mono",monospace}
+.cell{padding:15px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px;justify-content:center}
+.cell:last-child{border-right:0}
+.cap{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.modes{display:flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden}
+.modes button{background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);
+  padding:8px 15px;cursor:pointer;font:inherit;font-size:12px;letter-spacing:.04em}
+.modes button:last-child{border-right:0}
+.modes button.on{background:var(--sig);color:#0a0c11;font-weight:500}
+.dial{flex:1;min-width:260px}
+.dialrow{display:flex;align-items:center;gap:14px}
+.dialrow input{flex:1;accent-color:var(--sig)}
+.val{font-size:13px;color:var(--sig);min-width:3.2ch;text-align:right}
+.toggle{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;letter-spacing:.04em;cursor:pointer}
+.toggle input{accent-color:var(--sig)}
+.live{display:flex;align-items:center;gap:8px;color:var(--faint);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--sig);box-shadow:0 0 10px var(--sig)}
+.scrollhint{position:absolute;left:50%;top:90%;z-index:5;transform:translateX(-50%);
+  color:var(--faint);transition:opacity .35s ease;pointer-events:none;will-change:opacity}
+.scrollhint svg{display:block;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(4px);opacity:1}}
+@media (prefers-reduced-motion:reduce){.scrollhint svg{animation:none}}
+
+.modes button:focus-visible,.toggle input:focus-visible,.dialrow input:focus-visible,.scrollhint:focus-visible{outline:2px solid var(--sig);outline-offset:3px}
+
+@media (max-width:720px){
+  .head{flex-direction:column;gap:14px}
+  .console{flex-direction:column}
+  .cell{border-right:0;border-bottom:1px solid var(--line)}
+  .cell:last-child{border-bottom:0}
+  .dial{min-width:0}
+}
