@@ -58,11 +58,21 @@
 </main>
 <script type="module">
 import { initViewer } from "./js/viewer.js";
-initViewer(document.getElementById("hero-canvas"),
-           document.getElementById("hero-controls"), "./asset");
-const lineage = await initViewer(document.getElementById("lineage-canvas"),
-           document.getElementById("lineage-controls"), "./asset");
-lineage.setMode("pushbroom"); lineage.render();   // start on the "original" side
+async function mount(canvasId, controlsId, mode) {
+  try {
+    const v = await initViewer(document.getElementById(canvasId),
+                               document.getElementById(controlsId), "./asset");
+    if (mode) { v.setMode(mode); v.render(); }
+  } catch (e) {
+    const c = document.getElementById(canvasId);
+    const msg = document.createElement("p");
+    msg.className = "caption";
+    msg.textContent = "This demo needs a WebGL2-capable browser.";
+    c.replaceWith(msg);
+  }
+}
+mount("hero-canvas", "hero-controls");
+mount("lineage-canvas", "lineage-controls", "pushbroom");
 </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import { MosaicGL } from "./mosaic-gl.js";
 // controlsEl is expected to contain .modes button[data-m], input.vp, input.slices (optional).
 export async function initViewer(canvasEl, controlsEl, baseUrl) {
   const gl = canvasEl.getContext("webgl2", { antialias: false });
+  if (!gl) throw new Error("WebGL2 not supported");
   const { manifest, textures } = await loadAsset(gl, baseUrl);
   const m = new MosaicGL(gl, manifest, textures);
   const vp = controlsEl.querySelector("input.vp");
