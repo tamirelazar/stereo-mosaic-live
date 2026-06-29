@@ -39,7 +39,22 @@
     </div>
   </section>
 
-  <!-- Task 7: geometry explainer + depth teaser stub mount here -->
+  <section class="explainer">
+    <h2>How it works</h2>
+    <p>[… framing — Tamir ]</p>
+    <p class="fact">Each output column is taken from one source frame. The mode picks
+       <em>which</em> source column to sample per frame: pushbroom holds a fixed column
+       (a single slit); xslit slides the column linearly with frame index (a virtual
+       second slit → perspective); forward sweeps it quadratically (a looming push-in).
+       The viewpoint dial shifts the base column. Tick "show slices" above to see the
+       per-frame strip boundaries.</p>
+  </section>
+
+  <section class="depth-teaser">
+    <h2>Depth — next</h2>
+    <p class="stub">[… Phase 2 teaser: X-slit geometry is stereo; EPI slope ∝ depth.
+       Placeholder — not built yet. — Tamir ]</p>
+  </section>
 </main>
 <script type="module">
 import { initViewer } from "./js/viewer.js";
