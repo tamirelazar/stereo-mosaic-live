@@ -93,7 +93,7 @@ export class MosaicGL {
       gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.viewport(0,0,this.canvas.width,this.canvas.height);
       gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT);
       gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-      this._drawStrips(b,W,H); return;
+      this._drawStrips(b,W,H); gl.disable(gl.BLEND); return;
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER,this.fbo); gl.viewport(0,0,W,H);
     gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
