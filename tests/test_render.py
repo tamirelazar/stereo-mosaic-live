@@ -76,9 +76,11 @@ def test_export_web_asset_writes_frames_and_manifest(tmp_path):
     assert (out / "frame0001.jpg").exists()
     assert "panorama_size" in manifest and len(manifest["panorama_size"]) == 2
     for key in ["w", "h", "scale", "n", "panorama_size", "centers_pushbroom",
-                "homographies", "bounding_boxes", "warnings"]:
+                "homographies", "bounding_boxes", "warnings", "global_offset"]:
         assert key in manifest, "manifest missing key: %s" % key
     assert len(manifest["centers_pushbroom"]) == manifest["n"]
+    assert len(manifest["global_offset"]) == 2
+    assert all(isinstance(x, float) for x in manifest["global_offset"])
 
 
 def test_export_web_asset_stride_subsamples(tmp_path):

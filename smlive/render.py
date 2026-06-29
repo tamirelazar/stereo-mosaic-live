@@ -96,6 +96,7 @@ class Renderer:
             "centers_pushbroom": centers,
             "homographies": v.homographies[idxs].tolist(),
             "bounding_boxes": v.bounding_boxes[idxs].tolist(),
+            "global_offset": [float(v.global_offset[0]), float(v.global_offset[1])],
             "warnings": v.warnings,
         }
         with open(os.path.join(out_dir, "manifest.json"), "w") as fh:
