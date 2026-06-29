@@ -14,6 +14,7 @@ export async function mountViewer(canvasId, controlsId, { mode } = {}) {
     if (vp && val) vp.addEventListener("input", () => { val.textContent = (+vp.value).toFixed(2); });
     return m;
   } catch (e) {
+    // Note: this path also catches non-WebGL2 errors (e.g. asset/frame load failure); currently shows the generic WebGL2 message.
     document.body.classList.add("no-webgl2"); // Task 7 styles the fallback
     return null;
   }
@@ -47,11 +48,16 @@ function attract(m, controls) {
   const stop = () => { on = false; };
   controls.addEventListener("pointerdown", stop, { once: true });
   controls.addEventListener("keydown", stop, { once: true });
+  const vp = controls.querySelector("input.vp");
+  const val = controls.querySelector(".val");
   (function loop() {
     if (!on) return;
     t += 0.0035;
-    m.setViewpoint(0.5 + 0.32 * Math.sin(t));
+    const v = 0.5 + 0.32 * Math.sin(t);
+    m.setViewpoint(v);
     m.render();
+    if (vp) vp.value = v.toFixed(3);
+    if (val) val.textContent = v.toFixed(2);
     requestAnimationFrame(loop);
   })();
 }
