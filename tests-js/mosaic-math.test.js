@@ -1,10 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { centers, bounds, invAffine3 } from "../docs/js/mosaic-math.js";
+import { centers, bounds, invAffine3, columnForFrame, columnsForMode, centersFromColumns } from "../docs/js/mosaic-math.js";
+import M from "../docs/asset/manifest.json" with { type: "json" };
 
 const fx = JSON.parse(readFileSync(new URL("./parity.json", import.meta.url)));
-const M = fx.manifest;
+const Msmall = fx.manifest;
 const EPS = 1e-6;
 
 // Multiply two 3×3 matrices (row-major arrays) and return the result.
@@ -50,12 +51,32 @@ test("invAffine3 round-trip: scale+shear affine", () => {
         `Hinv·H[${r}][${c}] expected ${expected[r][c]} got ${I[r][c]}`);
 });
 
+test("columnsForMode matches columnForFrame per index", () => {
+  const cols = columnsForMode(M, 0.5, "pushbroom");
+  assert.equal(cols.length, M.n);
+  for (const i of [0, 108, M.n - 1])
+    assert.equal(cols[i], columnForFrame(i, 0.5, "pushbroom", M.n, M.w));
+});
+
+test("centersFromColumns(columnsForMode) equals centers", () => {
+  for (const mode of ["pushbroom", "xslit", "forward"]) {
+    const viaCols = centersFromColumns(M, columnsForMode(M, 0.5, mode));
+    const direct = centers(M, 0.5, mode);
+    for (let i = 0; i < M.n; i++)
+      assert.ok(Math.abs(viaCols[i] - direct[i]) < 1e-9, `mode ${mode} idx ${i}`);
+  }
+});
+
+test("centers[108] pushbroom is the money number", () => {
+  assert.ok(Math.abs(centers(M, 0.5, "pushbroom")[108] - 1890.04) < 0.01);
+});
+
 for (const mode of fx.modes) {
   for (const vp of fx.vps) {
     test(`centers/bounds parity ${mode} vp=${vp}`, () => {
       const exp = fx.expected[`${mode}_${vp.toFixed(1)}`];
-      const cen = centers(M, vp, mode);
-      const bnd = bounds(cen, M.panorama_size[0], M.n);
+      const cen = centers(Msmall, vp, mode);
+      const bnd = bounds(cen, Msmall.panorama_size[0], Msmall.n);
       assert.equal(cen.length, exp.centers.length);
       for (let i = 0; i < cen.length; i++)
         assert.ok(Math.abs(cen[i] - exp.centers[i]) < EPS, `center ${i}`);

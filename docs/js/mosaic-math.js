@@ -12,16 +12,26 @@ export function columnForFrame(i, viewpoint, mode, n, w) {
 }
 
 // apply a 3×3 affine (bottom row [0,0,1]) to [col, h/2], return warped x.
-function warpX(col, H, h) { return H[0][0] * col + H[0][1] * Math.floor(h / 2) + H[0][2]; }
+export function warpX(col, H, h) { return H[0][0] * col + H[0][1] * Math.floor(h / 2) + H[0][2]; }
 
-// panorama-space strip centre for every frame.
-export function centers(M, viewpoint, mode) {
+// per-frame source columns for a discrete sampling mode.
+export function columnsForMode(M, viewpoint, mode) {
+  const cols = new Float64Array(M.n);
+  for (let i = 0; i < M.n; i++) cols[i] = columnForFrame(i, viewpoint, mode, M.n, M.w);
+  return cols;
+}
+
+// panorama-space strip centre for an explicit per-frame column array.
+export function centersFromColumns(M, cols) {
   const c = new Float64Array(M.n);
-  for (let i = 0; i < M.n; i++) {
-    const col = columnForFrame(i, viewpoint, mode, M.n, M.w);
-    c[i] = warpX(col, M.homographies[i], M.h) - M.global_offset[0];
-  }
+  for (let i = 0; i < M.n; i++)
+    c[i] = warpX(cols[i], M.homographies[i], M.h) - M.global_offset[0];
   return c;
+}
+
+// panorama-space strip centre for every frame (discrete mode).
+export function centers(M, viewpoint, mode) {
+  return centersFromColumns(M, columnsForMode(M, viewpoint, mode));
 }
 
 // strip boundaries = midpoints of consecutive centres, clamped, ends 0..W.
