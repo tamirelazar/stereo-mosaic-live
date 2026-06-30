@@ -35,49 +35,23 @@
     <div class="cell"><span class="cap">Output</span>
       <span class="live"><span class="dot"></span>re-resampled on input</span></div>
   </div>
-  <a class="scrollhint" id="scrollhint" href="#explainer" aria-label="Scroll for more">
+  <a class="scrollhint" id="scrollhint" href="#about" aria-label="Scroll for more">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
   </a>
 </section>
-  <section class="below" id="explainer">
-    <span class="num">01 — How it works</span>
-    <h2>The whole thing is a choice of columns.</h2>
-    <p>Each output column is taken from one source frame. The mode picks <em>which</em> source
-       column to sample per frame: pushbroom holds a fixed column (a single slit); xslit slides the
-       column linearly with frame index (a virtual second slit → perspective); forward sweeps it
-       quadratically (a looming push-in). The viewpoint dial shifts the base column.</p>
-    <figure class="inset">
-      <div class="frame"><canvas id="slices-canvas"></canvas></div>
-      <div class="controls slices-controls" id="slices-controls">
-        <label class="toggle"><input class="slices" type="checkbox"> show slices</label>
-        <label class="dial">viewpoint <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5" aria-label="Viewpoint"></label>
-      </div>
-      <figcaption>Tick <b>show slices</b> to draw the per-frame strip seams — the space-time volume the mosaic is cut from.</figcaption>
-    </figure>
-  </section>
-
-  <section class="below" id="lineage">
-    <span class="num">02 — Lineage</span>
-    <h2>Same frames, two slits.</h2>
-    <p>Pushbroom is the original repo: one fixed slit, flat strips. X-slit is this fork — the slit
-       slides across the frames and perspective falls out of it. Same footage, one toggle apart.</p>
-    <figure class="inset">
-      <div class="frame"><canvas id="lineage-canvas"></canvas></div>
-      <div class="controls" id="lineage-controls">
-        <div class="modes">
-          <button data-m="pushbroom" class="on">pushbroom · original</button>
-          <button data-m="xslit">xslit · this fork</button>
-        </div>
-        <label class="dial">viewpoint <input class="vp" type="range" min="0" max="1" step="0.005" value="0.5" aria-label="Viewpoint"></label>
-      </div>
-    </figure>
-  </section>
-
-  <section class="below" id="depth">
-    <span class="num">03 — Depth</span>
-    <h2>Depth — next.</h2>
-    <p class="note">X-slit is quietly stereo — the sweep that bends perspective also leaves depth in
-       the slope of each feature's trail across the frames. Reading it back is the next step. Not built yet.</p>
+  <section class="below" id="about">
+    <span class="num">What this is</span>
+    <h2>A panorama whose viewpoint you set after the shot.</h2>
+    <p>One sideways pan in. Every output column is sampled from a single source frame; the
+       sampling mode decides <em>which</em> column per frame, so projection and viewpoint stay
+       adjustable after capture. The dial shifts the base column.</p>
+    <dl class="specs">
+      <div><dt>pushbroom</dt><dd>Fixed column — one slit, flat strips. The original repo.</dd></div>
+      <div><dt>xslit</dt><dd>Column slides with frame index — perspective falls out. This fork.</dd></div>
+      <div><dt>forward</dt><dd>Column sweeps quadratically — a looming push-in.</dd></div>
+    </dl>
+    <p class="note">X-slit is incidentally stereo: depth survives in the slope of each feature's
+       trail across the frames. Reading it back is the next step — not built yet.</p>
   </section>
 
   <footer class="foot">
